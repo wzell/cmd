@@ -2,11 +2,11 @@
 Central Moment Discrepancy for Domain-Invariant Representation Learning
 
 This repository contains code for reproducing the experiments reported in the
-IJCNN 2017 paper Central Moment Matching for Domain-Invariant Representation
-Learning by Werner Zellinger, Thomas Grubinger, Florian Sobieczky and
-Edwin Lughofer from the Department of Knowledge Based Mathematical Systems at
-the JKU Linz and the Data Analysis Systems Group at the
-Software Competence Hagenberg.
+paper Central Moment Matching for Domain-Invariant Representation
+Learning by Werner Zellinger, Edwin Lughofer and Susanne Saminger-Platz from
+the Department of Knowledge Based Mathematical Systems at the JKU Linz and
+Thomas Grubinger and Thomas Natschläger from the Data Analysis Systems Group at
+the Software Competence Hagenberg.
 
 # Requirements
 The implementation is based on Theano and the neural networks library Keras.
