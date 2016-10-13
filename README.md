@@ -13,6 +13,4 @@ We report results for two different benchmark datasets in our paper: AmazonRevie
 Use the files exp_office.py, exp_amazon_review.py and parameter_sensitivity.py to run all the experiments and create all the images from the paper. Please note that the code runs the full grid searches and random restarts and can therefore run some days.
 
 # Precomputed Weights
-If you don't get the exact same results but similar, the random number generator of theano could be the reason. This can be solved by using our precomputed weights in the folder utils/amazon_dataset/precomputed_weights.
-
-
+If you don't get the exact same results but similar ones, the random number generator of theano could be the reason. This can be solved by using our precomputed weights in the folder utils/amazon_dataset/precomputed_weights.
