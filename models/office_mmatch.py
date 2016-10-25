@@ -190,7 +190,7 @@ class NN:
             self.load(init_weights)
             
         best_acc = 0
-        best_loss = 0
+        best_loss = 100
         counter = 0
         dummy_y_t =np.zeros((x_t.shape[0],y_s.shape[1]))
         
