@@ -7,6 +7,7 @@ Created on Tue Jul 12 10:36:58 2016
 
 from __future__ import print_function
 
+
 import os
 import numpy as np
 
@@ -25,7 +26,6 @@ N_IMAGES_WC = 795
 S_IMAGE = 288
 S_BATCH = 2
 N_REPETITIONS = 10
-CLASS_PLOT = 14
 
 if __name__ == '__main__':
     """ main """
@@ -39,16 +39,13 @@ if __name__ == '__main__':
     datagen = ImageDataGenerator()
     am_gen = datagen.flow_from_directory(DATASET_FOLDER+'amazon/images',
                                          target_size=(S_IMAGE, S_IMAGE),
-                                         batch_size=S_BATCH,
-                                         shuffle=False)
+                                         batch_size=S_BATCH)
     dslr_gen = datagen.flow_from_directory(DATASET_FOLDER+'dslr/images',
                                            target_size=(S_IMAGE, S_IMAGE),
-                                           batch_size=S_BATCH,
-                                           shuffle=False)
+                                           batch_size=S_BATCH)
     wc_gen = datagen.flow_from_directory(DATASET_FOLDER+'webcam/images',
                                          target_size=(S_IMAGE, S_IMAGE),
-                                         batch_size=S_BATCH,
-                                         shuffle=False)
+                                         batch_size=S_BATCH)
     
     print("\nCreating/Loading image representations via VGG_16 model...")
     nn = NN(EXP_FOLDER)
@@ -109,7 +106,54 @@ if __name__ == '__main__':
         acc_amwc_dr = np.append(acc_amwc_dr, acc_tst_dr)
         print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst=    '+str(acc_tst))
         print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst-dr= '+str(acc_tst_dr))
-     
+    print("am->dslr:")
+    acc_amdslr = np.array([])
+    acc_amdslr_dr = np.array([])
+    for i in range(N_REPETITIONS):
+        np.random.seed(i)
+        print('--')
+        nn_amdslr = NN(EXP_FOLDER, n_features=256)
+        nn_amdslr_dr = NN(EXP_FOLDER, n_features=256, domain_regularizer=reg)
+        nn_amdslr.fit(x_am, y_am, x_dslr)
+        nn_amdslr_dr.fit(x_am, y_am, x_dslr)
+        acc_tst = nn_amdslr.evaluate(x_dslr, y_dslr)
+        acc_tst_dr = nn_amdslr_dr.evaluate(x_dslr, y_dslr)
+        acc_amdslr = np.append(acc_amdslr,acc_tst)
+        acc_amdslr_dr = np.append(acc_amdslr_dr,acc_tst_dr)
+        print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst=    '+str(acc_tst))
+        print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst-dr= '+str(acc_tst_dr))
+    print("dslr->am:")
+    acc_dslram = np.array([])
+    acc_dslram_dr = np.array([])
+    for i in range(N_REPETITIONS):
+        np.random.seed(i)
+        print('--')
+        nn_dslram = NN(EXP_FOLDER, n_features=256)
+        nn_dslram_dr = NN(EXP_FOLDER, n_features=256, domain_regularizer=reg)
+        nn_dslram.fit(x_dslr, y_dslr, x_am)
+        nn_dslram_dr.fit(x_dslr, y_dslr, x_am)
+        acc_tst = nn_dslram.evaluate(x_am, y_am)
+        acc_tst_dr = nn_dslram_dr.evaluate(x_am, y_am)
+        acc_dslram = np.append(acc_dslram,acc_tst)
+        acc_dslram_dr = np.append(acc_dslram_dr,acc_tst_dr)
+        print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst=    '+str(acc_tst))
+        print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst-dr= '+str(acc_tst_dr))
+    print("wc->am:")
+    acc_wcam = np.array([])
+    acc_wcam_dr = np.array([])
+    for i in range(N_REPETITIONS):
+        np.random.seed(i)
+        print('--')
+        nn_wcam = NN(EXP_FOLDER, n_features=256)
+        nn_wcam_dr = NN(EXP_FOLDER, n_features=256, domain_regularizer=reg)
+        nn_wcam.fit(x_wc, y_wc, x_am)
+        nn_wcam_dr.fit(x_wc, y_wc, x_am)
+        acc_tst = nn_wcam.evaluate(x_am, y_am)
+        acc_tst_dr = nn_wcam_dr.evaluate(x_am, y_am)
+        acc_wcam = np.append(acc_wcam,acc_tst)
+        acc_wcam_dr = np.append(acc_wcam_dr,acc_tst_dr)
+        print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst=    '+str(acc_tst))
+        print(str(i+1)+'/'+str(N_REPETITIONS)+' acc-tst-dr= '+str(acc_tst_dr)) 
     print('------------------------------------------------------------------')
     print("am->wc")
     print('SimpleNN acc-tst= '+str(acc_amwc.mean())+'+-'
@@ -126,6 +170,21 @@ if __name__ == '__main__':
     +str(acc_wcdslr.std()))
     print('MMatchNN acc-tst= '+str(acc_wcdslr_dr.mean())+'+-'
     +str(acc_wcdslr_dr.std()))
+    print("am->dslr")
+    print('SimpleNN acc-tst= '+str(acc_amdslr.mean())+'+-'
+    +str(acc_amdslr.std()))
+    print('MMatchNN acc-tst= '+str(acc_amdslr_dr.mean())+'+-'
+    +str(acc_amdslr_dr.std()))
+    print("dslr->am")
+    print('SimpleNN acc-tst= '+str(acc_dslram.mean())+'+-'
+    +str(acc_dslram.std()))
+    print('MMatchNN acc-tst= '+str(acc_dslram_dr.mean())+'+-'
+    +str(acc_dslram_dr.std()))
+    print("wc->am")
+    print('SimpleNN acc-tst= '+str(acc_wcam.mean())+'+-'
+    +str(acc_wcam.std()))
+    print('MMatchNN acc-tst= '+str(acc_wcam_dr.mean())+'+-'
+    +str(acc_wcam_dr.std()))
     print('------------------------------------------------------------------')
     
     print("\nCreate t-SNE grafik...")
@@ -136,17 +195,17 @@ if __name__ == '__main__':
     nn_am.fit(x_am, y_am, x_wc)
     nn_am_dr.fit(x_am, y_am, x_wc)
     cl_mouse = 14 # class of mouse images
-    acc_tst = nn_am.evaluate(x_wc[y_wc.argmax(1)==cl_mouse],
-                             y_wc[y_wc.argmax(1)==cl_mouse])
-    acc_tst_dr = nn_am_dr.evaluate(x_wc[y_wc.argmax(1)==cl_mouse],
-                                   y_wc[y_wc.argmax(1)==cl_mouse])
+    acc_tst = nn_am.evaluate(x_wc[y_wc.argmax(1)==14],
+                             y_wc[y_wc.argmax(1)==14])
+    acc_tst_dr = nn_am_dr.evaluate(x_wc[y_wc.argmax(1)==14],
+                                   y_wc[y_wc.argmax(1)==14])
     print('mouse acc-tst=    '+str(acc_tst))
     print('mouse acc-tst-dr= '+str(acc_tst_dr))
     
     plot_activations(EXP_FOLDER+'tsne_nn', nn_am, x_am, y_am, x_wc, y_wc,
-                     lift=True, cl_lift=cl_mouse)
+                     lift=True, cl_lift=14)
     plot_activations(EXP_FOLDER+'tsne_mmatch', nn_am_dr, x_am, y_am, x_wc,
-                     y_wc, lift=True, cl_lift=cl_mouse)
+                     y_wc, lift=True, cl_lift=14)
     
     
     
