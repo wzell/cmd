@@ -70,9 +70,20 @@ class Batches:
         """
         calculate random batch if batchsize of target is greater than source
         """
-        x_add, y_add = self.next_batch_smaller(self.x, self.y, self.batch_size-self.x.shape[0])
-        x_batch = np.concatenate((self.x,x_add),axis=0)
-        y_batch = np.concatenate((self.y,y_add),axis=0)
+        n_remaining = self.batch_size
+        is_first = True
+        while n_remaining >= self.x.shape[0]:
+            if is_first:
+                x_batch = self.x
+                y_batch = self.y
+                is_first = False
+            else:
+                x_batch = np.concatenate((x_batch,self.x),axis=0)
+                y_batch = np.concatenate((y_batch,self.y),axis=0)
+            n_remaining -= self.x.shape[0]
+        x_add, y_add = self.next_batch_smaller(self.x, self.y, n_remaining)
+        x_batch = np.concatenate((x_batch,x_add),axis=0)
+        y_batch = np.concatenate((y_batch,y_add),axis=0)
         return x_batch, y_batch
         
             
@@ -190,11 +201,11 @@ class NN:
             self.load(init_weights)
             
         best_acc = 0
-        best_loss = 100
+        best_loss = 0
         counter = 0
         dummy_y_t =np.zeros((x_t.shape[0],y_s.shape[1]))
         
-        iter_batches = Batches(x_s, y_s, x_t.shape[0])
+        iter_batches = Batches(x_s, y_s, x_t.shape[0])          
             
         for i in range(self.max_n_epoch):
             x_s_batch, y_s_batch = iter_batches.next_batch()
