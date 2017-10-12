@@ -3,7 +3,7 @@ Central Moment Discrepancy for Domain-Invariant Representation Learning - ICLR 2
 
 This repository contains code for reproducing the experiments reported in the paper [Central Moment Matching for Domain-Invariant Representation Learning](http://openreview.net/forum?id=SkB-_mcel) published at the International Conference on Learning Representations (ICLR2017) by Werner Zellinger, Edwin Lughofer and Susanne Saminger-Platz from the Department of Knowledge Based Mathematical Systems at the JKU Linz, and, Thomas Grubinger and Thomas Natschläger from the Data Analysis Systems Group at the Software Competence Hagenberg.
 
-In the source code, the CMD domain-eregularizer is denoted by 'mmatch'.
+In the source code, the CMD domain-regularizer is denoted by 'mmatch'.
 
 # requirements
 The implementation is based on Theano and the neural networks library Keras. For installing Theano and Keras please follow the installation instruction on the respective github pages. You will also need: numpy, pandas, seaborn, matplotlib, sklearn and scipy
