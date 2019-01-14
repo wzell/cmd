@@ -1,9 +1,11 @@
 # CMD
 Central Moment Discrepancy for Domain-Invariant Representation Learning - ICLR 2017
 
+**Note: An [extended journal version](https://doi.org/10.1016/j.ins.2019.01.025) is avilable together with its [source code](https://github.com/wzell/mann) and [arXiv version](https://arxiv.org/abs/1711.06114)**
+
 This repository contains code for reproducing the experiments reported in the paper [Central Moment Discrepancy (CMD) for Domain-Invariant Representation Learning](http://openreview.net/forum?id=SkB-_mcel) published at the International Conference on Learning Representations (ICLR2017) by Werner Zellinger, Edwin Lughofer and Susanne Saminger-Platz from the Department of Knowledge Based Mathematical Systems at the JKU Linz, and, Thomas Grubinger and Thomas Natschläger from the Data Analysis Systems Group at the Software Competence Hagenberg.
 
-In the source code, the CMD domain-regularizer is denoted by 'mmatch'. Please note that our work has been refined and its source code is available on [github](https://github.com/wzell/mann/). A refined version of our paper with extended theory and experiments is also [available](https://arxiv.org/abs/1711.06114).
+In the source code, the CMD domain-regularizer is denoted by 'mmatch'.
 
 # Requirements
 The implementation is based on Theano and the neural networks library Keras. For installing Theano and Keras please follow the installation instruction on the respective github pages. You will also need: numpy, pandas, seaborn, matplotlib, sklearn and scipy
